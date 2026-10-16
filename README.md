@@ -1,108 +1,62 @@
-# ffnn-binary-classification-keras-
-# FFNN Binary Classification with Keras
+# Binary Classification with a Feed-Forward Neural Network
 
-A binary classification project that uses a Feed Forward Neural Network
-(FFNN) built with TensorFlow and Keras.
+A small **Keras/TensorFlow binary classifier** using 512 numerical inputs per example. This is a tabular-data neural network project, not a computer-vision model.
 
-The project demonstrates how to prepare a labelled dataset, divide it into
-training and testing sets, train a neural network, visualise its learning
-progress, and evaluate its performance using standard classification
-metrics.
+## What I built
 
-## Project Overview
+The notebook trains a three-layer feed-forward network using **4,500 labelled records** (512 numerical inputs plus a binary target). The input data is split **85% training / 15% held-out test** using stratification and `random_state=17`.
 
-The dataset contains:
+| Network / setting | Value in executed notebook |
+|---|---|
+| Hidden layers | Dense(12, ReLU) → Dense(8, ReLU) |
+| Output | Dense(1, sigmoid) |
+| Optimiser | Adam |
+| Loss | Binary cross-entropy |
+| Epochs | 200 |
+| Batch size | 64 |
 
-- 4,500 labelled examples
-- 512 input features per example
-- Two output classes: positive and negative
+### Saved test results
 
-The dataset is divided into:
+These figures are from the notebook's **stored execution output**. They were not independently reproduced when this README was updated.
 
-- 85% training data
-- 15% testing data
-
-The split uses stratification to preserve the class distribution between
-the training and testing sets.
-
-## Objectives
-
-This project demonstrates how to:
-
-1. Load and prepare a dataset using Pandas.
-2. Split data into training and testing sets.
-3. Build a Feed Forward Neural Network using Keras.
-4. Train the model for binary classification.
-5. Visualise training accuracy and loss.
-6. Test the model on unseen data.
-7. Calculate Precision, Recall, F1-Score, and Accuracy.
-
-## Technologies Used
-
-- Python
-- Jupyter Notebook
-- Google Colab
-- TensorFlow
-- Keras
-- NumPy
-- Pandas
-- Matplotlib
-- Scikit-learn
-
-## Model Architecture
-
-The model is a sequential Feed Forward Neural Network containing:
-
-- An input layer accepting 512 features
-- One or more fully connected hidden layers
-- ReLU activation functions in the hidden layers
-- One output neuron with a sigmoid activation function
-
-The sigmoid output represents the predicted probability of the positive
-class.
-
-## Training
-
-The model is trained using:
-
-- Epochs: 200
-- Batch size: 64
-- Loss function: Binary cross-entropy
-- Optimiser: [replace with your optimiser, such as Adam]
-- Evaluation metric: Accuracy
-
-## Model Evaluation
-
-The trained model is evaluated on the unseen test set using:
-
-| Metric | Result |
+| Metric | Recorded result |
 |---|---:|
-| Precision | Replace with your result |
-| Recall | Replace with your result |
-| F1-Score | Replace with your result |
-| Accuracy | Replace with your result |
+| Precision | **0.9930** |
+| Recall | **1.0000** |
+| F1-score | **0.9965** |
+| Accuracy | **0.9956** |
 
-### Metric Descriptions
+A high held-out score does not automatically prove that the model will generalise to a different dataset. The notebook does not show an independent validation split or repeated runs. It also does not adequately document the origin or meaning of the 512 input features; that needs addressing before real-world use.
 
-- **Precision:** The proportion of positive predictions that were correct.
-- **Recall:** The proportion of actual positive examples correctly identified.
-- **F1-Score:** The harmonic mean of precision and recall.
-- **Accuracy:** The proportion of all test examples classified correctly.
+## Files
 
-## Running the Project
+- [`binary_classification_clean.ipynb`](binary_classification_clean.ipynb): cleaned presentation copy with the original training/evaluation cells and saved results
+- [`1.3C.ipynb`](1.3C.ipynb): original notebook, preserved unchanged
+- [`data.csv`](data.csv): dataset as currently published; **provenance and permission to redistribute still need verification**
+- [`check_dataset.py`](check_dataset.py): schema and basic quality checks
+- [`tests/`](tests/): tests for input-validation code
 
-### Google Colab
+## Run
 
-1. Open Google Colab.
-2. Upload `FFNN_Classification.ipynb`.
-3. Upload `data.csv` to the Colab session.
-4. Select **Runtime → Run all**.
-5. Review the training graphs and evaluation results.
-
-### Local Jupyter Notebook
-
-Clone the repository:
+Python 3.10–3.12 is recommended for an easier TensorFlow installation.
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ffnn-binary-classification-keras.git
-cd ffnn-binary-classification-keras
+python -m venv .venv
+# Activate the environment, then:
+python -m pip install -r requirements.txt
+python check_dataset.py --data data.csv
+jupyter notebook binary_classification_clean.ipynb
+```
+
+To run only the data-schema tests (without installing TensorFlow), use:
+
+```bash
+python -m pip install -r requirements-test.txt
+python -m pytest -q
+```
+
+## Limitations
+
+The notebook trains on the available features and tests once on the held-out partition. It does **not** establish performance on newly collected or externally validated data. The 200-epoch experiment may overfit and does not include early stopping. Verify the public dataset's provenance and redistribution rights before relying on it as portfolio evidence.
+
+**Author:** Zenith Anthony Dabarera · [GitHub](https://github.com/Zenith1997)
